@@ -3,7 +3,8 @@
 const todoControl = document.querySelector('.todo-control'),
       headerInput = document.querySelector('.header-input'),
       todoList = document.querySelector('.todo-list'),
-      todoCompleted = document.querySelector('.todo-completed');
+      todoCompleted = document.querySelector('.todo-completed'),
+      todoRemove = document.querySelector('todo-remove');
 
 const todoData = [];
 
@@ -11,7 +12,7 @@ const render = function () {
     todoList.textContent = '';
     todoCompleted.textContent = '';
 
-    todoData.forEach(function(item){ 
+    todoData.forEach(function(item){
 
         const li = document.createElement('li');
         li.classList.add('todo-item');
@@ -38,7 +39,10 @@ const render = function () {
 };
 
 todoControl.addEventListener('submit', function(event) {
-    event.preventDefault();
+    let resultHeaderInput = headerInput.value;
+  
+    if (resultHeaderInput.trim() !== '') {
+      event.preventDefault();
 
     const newTodo = {
       value: headerInput.value,
@@ -46,8 +50,14 @@ todoControl.addEventListener('submit', function(event) {
     };
 
     todoData.push(newTodo);
+    headerInput.value = '';
 
     render();
+    } else {alert('Поле не должно быть пустым!')};
+});
+
+todoRemove.addEventListener('click', function(){
+
 });
 
 render();
