@@ -3,10 +3,17 @@
 const todoControl = document.querySelector('.todo-control'),
       headerInput = document.querySelector('.header-input'),
       todoList = document.querySelector('.todo-list'),
-      todoCompleted = document.querySelector('.todo-completed'),
-      todoRemove = document.querySelector('todo-remove');
+      todoCompleted = document.querySelector('.todo-completed');
 
-const todoData = [];
+
+
+let todoData = [];
+
+let todoDataStorage = JSON.parse(localStorage.getItem("todoData"));
+
+if (todoDataStorage !== null) {
+    todoData = todoDataStorage;
+}
 
 const render = function () {
     todoList.textContent = '';
@@ -28,21 +35,27 @@ const render = function () {
         } else {
             todoList.append(li);
         }
-
         const btnTodoComplete = li.querySelector('.todo-complete');
-
         btnTodoComplete.addEventListener('click', function(){
             item.completed = !item.completed;
             render();
         });
+
+        const btnTodoRemove = li.querySelector('.todo-remove');
+        btnTodoRemove.addEventListener('click', function(){
+            const liRemove = li.remove();
+            todoData.splice(todoData.indexOf(liRemove), 1);
+        });
     });
+
+    localStorage.setItem("todoData", JSON.stringify(todoData));
 };
 
 todoControl.addEventListener('submit', function(event) {
     let resultHeaderInput = headerInput.value;
   
     if (resultHeaderInput.trim() !== '') {
-      event.preventDefault();
+    event.preventDefault();
 
     const newTodo = {
       value: headerInput.value,
@@ -53,11 +66,8 @@ todoControl.addEventListener('submit', function(event) {
     headerInput.value = '';
 
     render();
-    } else {alert('Поле не должно быть пустым!')};
-});
 
-todoRemove.addEventListener('click', function(){
-
+    }else {alert('Поле не должно быть пустым!')};
 });
 
 render();
